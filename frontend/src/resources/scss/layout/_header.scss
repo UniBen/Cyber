@@ -1,0 +1,9 @@
+.site-header {
+  background-color: $blue;
+  color: $lightgrey;
+  padding: 1rem 2rem;
+
+  .header__logo {
+    max-width: 100px;
+  }
+}

@@ -1,3 +1,5 @@
+const cors = require('cors');
+const fileUpload = require('express-fileupload');
 const express = require('express');
 const transform = require('stream-transform');
 const assert = require('assert');
@@ -5,10 +7,19 @@ const assert = require('assert');
 const app = express();
 const port = 3000;
 
+app.use(cors());
+app.use(fileUpload());
+
 /**
  * Handle csv
  */
-app.get('/', (req, res) => {
+app.post('/upload', (req, res) => {
+    console.log(req);
+
+    res.send({status: 'done', files: req.files});
+
+    return;
+
     const output = [];
 
     transform([

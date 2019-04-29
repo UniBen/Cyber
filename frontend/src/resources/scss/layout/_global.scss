@@ -1,0 +1,26 @@
+* {
+  box-sizing: border-box;
+
+  &:before, &:after {
+    box-sizing: inherit;
+  }
+}
+
+body {
+  font-family: 'Mukta', sans-serif;
+  color: rgba(0,0,0,0.87);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.content {
+  padding: 1rem;
+}

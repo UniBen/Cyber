@@ -1,4 +1,9 @@
-# cyber
+# Cyber Assignment
+
+## Libraries used
+
+* vue
+* vue-dropzone
 
 ## Project setup
 ```

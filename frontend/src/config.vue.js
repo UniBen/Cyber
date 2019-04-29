@@ -15,5 +15,9 @@ module.exports = {
         loaders: {
             scss: 'style!css!sass'
         }
+    },
+    devServer: {
+        proxy: 'http://localhost:3000',
     }
+
 };

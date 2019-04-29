@@ -1,3 +1,13 @@
-* {
-  color: red;
-}
+@import url('https://fonts.googleapis.com/css?family=Mukta');
+
+// Plugins
+@import "~normalize.css";
+@import "~vue2-dropzone/dist/vue2Dropzone.min.css";
+
+// Project
+@import "_variables.scss";
+
+// Layout
+@import "layout/global.scss";
+@import "layout/header.scss";
+
