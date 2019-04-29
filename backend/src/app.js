@@ -1,14 +1,39 @@
-const http = require('http');
+const express = require('express');
+const transform = require('stream-transform');
+const assert = require('assert');
 
-const hostname = '127.0.0.1';
+const app = express();
 const port = 3000;
 
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Hello World\n');
+/**
+ * Handle csv
+ */
+app.get('/', (req, res) => {
+    const output = [];
+
+    transform([
+        ['1','2','3','4'],
+        ['a','b','c','d']
+    ], function(data){
+        data.push(data.shift());
+        return data
+    })
+        .on('readable', function(){
+            while(row = this.read()){
+                output.push(row)
+            }
+        })
+        .on('error', function(err){
+            console.error(err.message)
+        })
+        .on('finish', function(){
+            assert.deepEqual(output, [
+                [ '2', '3', '4', '1' ],
+                [ 'b', 'c', 'd', 'a' ]
+            ])
+
+            res.send(output);
+        })
 });
 
-server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
-});
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
