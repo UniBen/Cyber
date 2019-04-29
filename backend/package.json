@@ -1,0 +1,17 @@
+{
+  "name": "cyber",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "scripts": {
+    "serve": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "csv": "^5.1.1",
+    "csv-parse": "^4.4.1",
+    "stream-transform": "^2.0.0"
+  }
+}

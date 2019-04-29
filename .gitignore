@@ -1,0 +1,6 @@
+# Webstorm project files
+.idea
+.env
+*.iml
+out
+gen
