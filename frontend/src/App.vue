@@ -1,5 +1,31 @@
 <style lang="scss">
   @import "resources/scss/main.scss";
+
+  .button-group {
+    display: inline-block;
+    padding: .5rem;
+    margin: 0 0 1rem;
+    border: 1px solid $lightgrey;
+    border-radius: .25rem;
+
+    .btn {
+      margin: .25rem;
+    }
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .results {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+
+    td {
+      padding: .25rem 0.125rem;
+    }
+  }
 </style>
 
 <template>
@@ -12,8 +38,34 @@
 
     <main>
       <div class="container">
+        <ParseCSS :range="50"></ParseCSS>
+
         <div class="content">
-          <vue-dropzone id="csv-upload" ref="upload" :options="dropOptions"></vue-dropzone>
+          <div class="button-group">
+            <button @click="restart" v-if="complete" class="btn">Restart</button>
+            <button @click="toggleDifference" v-if="complete" class="btn">Show Difference</button>
+          </div>
+
+          <vue-dropzone
+            id="csv-upload"
+            ref="upload"
+            v-if="!complete"
+            v-on:vdropzone-complete="uploaded"
+            v-on:vdropzone-success="success"
+            :options="dropOptions"
+          ></vue-dropzone>
+
+          <table v-if="complete" class="results">
+            <tr v-for="(row, index) in items" :key="index">
+              <td
+                v-for="(column, index) in row"
+                :data-difference="column.difference"
+                :key="index"
+                :title="!showDifference ? column.difference : column.value">
+                  {{ showDifference ? column.difference : column.value }}
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
     </main>
@@ -21,24 +73,41 @@
 </template>
 
 <script>
-import vueDropzone from "vue2-dropzone";
+  import vueDropzone from "vue2-dropzone";
+  import ParseCSS from './components/ParseCSS'
 
-export default {
-  name: 'app',
-  data: () => ({
-    dropOptions: {
-      url: "http://localhost:3000/upload",
-      method: 'post',
-      acceptedFiles: '.csv',
-      maxFiles: 1,
+  export default {
+    name: 'app',
+    data: () => ({
+      complete: false,
+      items: [],
+      showDifference: false,
+      dropOptions: {
+        url: "http://localhost:3000/upload",
+        method: 'post',
+        acceptedFiles: '.csv',
+        maxFiles: 1,
+      }
+    }),
+    components: {
+      vueDropzone,
+      ParseCSS
+    },
+    methods: {
+      uploaded() {
+        this.$refs.upload.removeAllFiles()
+      },
+      success(file, response) {
+        this.items = response;
+        this.complete = true
+      },
+      toggleDifference() {
+        this.showDifference = !this.showDifference;
+      },
+      restart() {
+        Object.assign(this.$data, this.$options.data())
+      }
     }
-  }),
-  components: {
-    vueDropzone
-  },
-  methods: {
-    upload: () => console.log('Uploading file')
   }
-}
 </script>
 

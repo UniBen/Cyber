@@ -13,7 +13,27 @@ services:
     build: ./backend/etc
     working_dir: /app
     command: npm run serve
+    env_file:
+      - .env
     volumes:
       - ./backend:/app
     ports:
       - 3000:3000
+    networks:
+      - redis-net
+    depends_on:
+      - redis
+  redis:
+    image: redis:4.0.5-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
+    networks:
+      - redis-net
+    volumes:
+      - redis-data:/data
+
+networks:
+  redis-net:
+
+volumes:
+  redis-data:

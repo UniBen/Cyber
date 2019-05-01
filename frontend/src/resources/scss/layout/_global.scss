@@ -24,3 +24,14 @@ img {
 .content {
   padding: 1rem;
 }
+
+.btn {
+  background-color: $blue;
+  color: mix($blue, $white, 25%);
+  padding: .5rem 1rem;
+  margin: .25rem 0 .5rem;
+  border: none;
+  border-radius: .25rem;
+  outline: none;
+  cursor: pointer;
+}
