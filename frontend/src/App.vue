@@ -23,6 +23,7 @@
     text-align: center;
 
     td {
+      height: 20px;
       padding: .25rem 0.125rem;
     }
   }
@@ -55,17 +56,19 @@
             :options="dropOptions"
           ></vue-dropzone>
 
-          <table v-if="complete" class="results">
-            <tr v-for="(row, index) in items" :key="index">
-              <td
-                v-for="(column, index) in row"
-                :data-difference="column.difference"
-                :key="index"
-                :title="!showDifference ? column.difference : column.value">
-                  {{ showDifference ? column.difference : column.value }}
-              </td>
-            </tr>
-          </table>
+          <div v-if="complete" class="results">
+            <virtual-list :size="20" :remain="20">
+              <tr v-for="(row, index) in items" :key="index">
+                <td
+                  v-for="(column, index) in row"
+                  :data-difference="column.difference"
+                  :key="index"
+                  :title="!showDifference ? column.difference : column.value">
+                    {{ showDifference ? column.difference : column.value }}
+                </td>
+              </tr>
+            </virtual-list>
+          </div>
         </div>
       </div>
     </main>
@@ -74,7 +77,9 @@
 
 <script>
   import vueDropzone from "vue2-dropzone";
-  import ParseCSS from './components/ParseCSS'
+  import virtualList from 'vue-virtual-scroll-list';
+  import axios from 'axios';
+  import ParseCSS from './components/ParseCSS';
 
   export default {
     name: 'app',
@@ -91,14 +96,16 @@
     }),
     components: {
       vueDropzone,
-      ParseCSS
+      virtualList,
+      ParseCSS,
     },
     methods: {
       uploaded() {
         this.$refs.upload.removeAllFiles()
       },
       success(file, response) {
-        this.items = response;
+        axios.get(`http://localhost:3000/get/${response.key}/1`);
+
         this.complete = true
       },
       toggleDifference() {
